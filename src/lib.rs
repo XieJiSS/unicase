@@ -281,6 +281,14 @@ impl<S1: AsRef<str>, S2: AsRef<str>> PartialEq<UniCase<S2>> for UniCase<S1> {
 
 impl<S: AsRef<str>> Eq for UniCase<S> {}
 
+impl<S: AsRef<str> + Clone> From<&S> for UniCase<S> {
+    #[inline]
+    fn from(s: &S) -> UniCase<S> {
+        let owned = s.clone();
+        UniCase::new(owned)
+    }
+}
+
 impl<S: AsRef<str>> Hash for UniCase<S> {
     #[inline]
     fn hash<H: Hasher>(&self, hasher: &mut H) {
@@ -424,6 +432,12 @@ mod tests {
 
         assert!(a != b);
         assert!(b != a);
+    }
+
+    #[test]
+    fn test_ref_into() {
+        let input = "foobar".to_string();
+        let _: UniCase<String> = (&input).into();
     }
 
     #[cfg(feature = "nightly")]

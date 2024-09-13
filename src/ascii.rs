@@ -165,6 +165,14 @@ impl<S: AsRef<str>> From<S> for Ascii<S> {
     }
 }
 
+impl<S: AsRef<str> + Clone> From<&S> for Ascii<S> {
+    #[inline]
+    fn from(s: &S) -> Ascii<S> {
+        let owned = s.clone();
+        Ascii(owned)
+    }
+}
+
 macro_rules! into_impl {
     ($to:ty) => {
         impl<'a> Into<$to> for Ascii<$to> {
@@ -221,6 +229,12 @@ mod tests {
         assert_eq!("fooBar", a);
         assert_eq!(String::from("fooBar"), a);
         assert_eq!(a, String::from("fooBar"));
+    }
+
+    #[test]
+    fn test_ref_into() {
+        let input = "foobar".to_string();
+        let _: Ascii<String> = (&input).into();
     }
 
     #[test]
