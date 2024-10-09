@@ -28,12 +28,12 @@ impl<S> Ascii<S> {
         Ascii(s)
     }
 
-    #[cfg(__unicase_const_fns)]
+    #[cfg(__unicase__const_fns)]
     pub const fn into_unicase(self) -> UniCase<S> {
         UniCase(Encoding::Ascii(self))
     }
 
-    #[cfg(not(__unicase_const_fns))]
+    #[cfg(not(__unicase__const_fns))]
     pub fn into_unicase(self) -> UniCase<S> {
         UniCase(Encoding::Ascii(self))
     }
